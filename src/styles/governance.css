@@ -30,6 +30,12 @@
   font-size: 12px;
 }
 
+.governance-heading__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .governance-filter {
   display: grid;
   grid-template-columns: repeat(5, minmax(130px, 1fr)) auto;

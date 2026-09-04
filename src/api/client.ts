@@ -157,6 +157,28 @@ export async function getBinary(
   }
 }
 
+export async function postBinary(
+  path: string,
+  data?: unknown,
+  baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api",
+): Promise<Blob> {
+  try {
+    const response = await axios.post<Blob>(path, data, {
+      baseURL,
+      timeout: 30_000,
+      responseType: "blob",
+      headers: readAdminToken()
+        ? { Authorization: `Bearer ${readAdminToken()}` }
+        : undefined,
+    });
+    return response.data;
+  } catch (error) {
+    const mapped = await mapBinaryHttpError(error);
+    handleUnauthorized(mapped);
+    throw mapped;
+  }
+}
+
 export function errorMessage(error: unknown): string {
   return mapHttpError(error).message;
 }

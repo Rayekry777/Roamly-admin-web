@@ -9,8 +9,9 @@ import {
   ElTag,
 } from "element-plus";
 import { onMounted, ref } from "vue";
-import { listAdminRedemptions } from "@/api/operations";
+import { exportAdminResource, listAdminRedemptions } from "@/api/operations";
 import { errorMessage } from "@/api/client";
+import { saveBlob } from "@/utils/download";
 import type { AdminRedemption } from "@/types/operations";
 const rows = ref<AdminRedemption[]>([]);
 const total = ref(0);
@@ -44,6 +45,7 @@ function label(value: string) {
       : value;
 }
 onMounted(load);
+async function exportRows(): Promise<void> { try { saveBlob(await exportAdminResource("redemptions"), "roamly-redemptions.xlsx"); } catch (error) { ElMessage.error(errorMessage(error)); } }
 </script>
 <template>
   <section class="governance-page">
@@ -52,7 +54,7 @@ onMounted(load);
         <p>履约监管</p>
         <h1>核销审计</h1>
       </div>
-      <span class="governance-heading__meta">共 {{ total }} 条</span>
+      <div class="governance-heading__actions"><ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton><span class="governance-heading__meta">共 {{ total }} 条</span></div>
     </header>
     <section class="governance-table">
       <ElTable

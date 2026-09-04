@@ -1,4 +1,4 @@
-import { http } from "./client";
+import { http, postBinary } from "./client";
 import type { PageResult } from "@/types/http";
 import type {
   AdminAuditLog,
@@ -87,4 +87,8 @@ export function listAdminAuditLogs(
   size = 20,
 ): Promise<PageResult<AdminAuditLog>> {
   return http.get("/v1/admin/audit-logs", { params: { page, size } });
+}
+
+export function exportAdminResource(resource: string): Promise<Blob> {
+  return postBinary(`/v1/admin/${resource}/export`);
 }

@@ -9,8 +9,9 @@ import {
   ElTag,
 } from "element-plus";
 import { onMounted, ref } from "vue";
-import { listAdminAuditLogs } from "@/api/operations";
+import { exportAdminResource, listAdminAuditLogs } from "@/api/operations";
 import { errorMessage } from "@/api/client";
+import { saveBlob } from "@/utils/download";
 import type { AdminAuditLog } from "@/types/operations";
 const rows = ref<AdminAuditLog[]>([]);
 const total = ref(0);
@@ -36,6 +37,7 @@ function label(value: string) {
   return value === "SUCCEEDED" ? "成功" : value === "FAILED" ? "失败" : value;
 }
 onMounted(load);
+async function exportRows(): Promise<void> { try { saveBlob(await exportAdminResource("audits"), "roamly-audits.xlsx"); } catch (error) { ElMessage.error(errorMessage(error)); } }
 </script>
 <template>
   <section class="governance-page">
@@ -44,7 +46,7 @@ onMounted(load);
         <p>安全与合规</p>
         <h1>操作审计</h1>
       </div>
-      <span class="governance-heading__meta">共 {{ total }} 条</span>
+      <div class="governance-heading__actions"><ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton><span class="governance-heading__meta">共 {{ total }} 条</span></div>
     </header>
     <section class="governance-table">
       <ElTable
