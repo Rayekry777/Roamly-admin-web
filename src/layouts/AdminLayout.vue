@@ -14,12 +14,14 @@ import {
   ElDropdownItem,
   ElDropdownMenu,
   ElIcon,
+  ElNotification,
 } from "element-plus";
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { visibleMenu } from "@/navigation/menu";
 import { useAuthStore } from "@/stores/auth";
+import { startAdminRealtime, type AdminRealtimeEvent } from "@/api/realtime";
 
 const auth = useAuthStore();
 const route = useRoute();
@@ -28,6 +30,8 @@ const collapsed = ref(false);
 const mobileMenuOpen = ref(false);
 const menu = computed(() => visibleMenu(auth.current?.permissions ?? []));
 const tabs = ref<{ path: string; label: string }[]>([]);
+const realtimeState = ref<"connected" | "fallback">("fallback");
+let stopRealtime: (() => void) | undefined;
 
 watch(
   [() => route.path, menu],
@@ -58,6 +62,23 @@ function closeTab(path: string): void {
   const fallback = tabs.value[Math.max(0, index - 1)];
   void router.push(fallback?.path ?? "/dashboard");
 }
+
+function onRealtimeEvent(event: AdminRealtimeEvent): void {
+  if (event.type === "FALLBACK_REFRESH") return;
+  const labels: Record<string, string> = {
+    PAYMENT_UPDATED: "支付订单",
+    REFUND_UPDATED: "退款记录",
+    VOUCHER_REDEEMED: "核销记录",
+    REDEMPTION_REVERSED: "撤销记录",
+    MERCHANT_REVIEWED: "商户审核",
+    SETTLEMENT_UPDATED: "结算批次",
+  };
+  ElNotification({ title: "数据已更新", message: `${labels[event.type] ?? "业务数据"}发生变化，请刷新当前列表`, type: "info", duration: 3500 });
+  window.dispatchEvent(new CustomEvent("roamly-admin-realtime", { detail: event }));
+}
+
+onMounted(() => { stopRealtime = startAdminRealtime({ onEvent: onRealtimeEvent, onState: (state) => { realtimeState.value = state; } }); });
+onBeforeUnmount(() => stopRealtime?.());
 </script>
 
 <template>
@@ -115,6 +136,7 @@ function closeTab(path: string): void {
             <ElBreadcrumbItem>{{ route.meta.title }}</ElBreadcrumbItem>
           </ElBreadcrumb>
         </div>
+        <span class="admin-realtime-state" :class="`admin-realtime-state--${realtimeState}`">{{ realtimeState === "connected" ? "实时已连接" : "实时连接重试中" }}</span>
         <ElDropdown trigger="click">
           <ElButton class="admin-user-menu">
             <span class="admin-user-menu__avatar">{{
@@ -290,6 +312,26 @@ function closeTab(path: string): void {
   :deep(.el-breadcrumb__item:first-child .el-breadcrumb__inner) {
   color: var(--roamly-muted);
   font-weight: 400;
+}
+
+.admin-realtime-state {
+  margin-left: auto;
+  margin-right: 16px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  color: var(--roamly-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.admin-realtime-state--connected {
+  color: #27845c;
+  background: #eaf8f0;
+}
+
+.admin-realtime-state--fallback {
+  color: #9a6a12;
+  background: #fff7df;
 }
 
 .admin-user-menu {
