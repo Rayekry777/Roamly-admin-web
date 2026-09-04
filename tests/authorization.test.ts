@@ -18,6 +18,13 @@ describe("静态菜单与按钮权限", () => {
         (item) => item.label,
       ),
     ).toEqual(["运营摘要", "管理员账号"]);
+    expect(
+      visibleMenu([
+        "admin:dashboard:read",
+        "admin:merchant-application:review",
+        "admin:shop:govern",
+      ]).map((item) => item.label),
+    ).toEqual(["运营摘要", "商户申请", "门店治理"]);
   });
 
   it("权限指令移除未授权命令", () => {

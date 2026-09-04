@@ -63,4 +63,24 @@ describe("管理端路由守卫", () => {
     await router.isReady();
     expect(router.currentRoute.value.path).toBe("/forbidden");
   });
+
+  it("商户审核员可以进入申请和门店治理页面", async () => {
+    localStorage.setItem(TOKEN_KEY, "reviewer-token");
+    vi.mocked(getCurrentAdmin).mockResolvedValue({
+      ...platformAdmin,
+      role: "MERCHANT_REVIEWER",
+      roleLabel: "商户审核员",
+      permissions: [
+        "admin:dashboard:read",
+        "admin:merchant-application:review",
+        "admin:shop:govern",
+      ],
+    });
+    const router = createAppRouter(createPinia());
+    await router.push("/merchant-applications");
+    await router.isReady();
+    expect(router.currentRoute.value.path).toBe("/merchant-applications");
+    await router.push("/shops");
+    expect(router.currentRoute.value.path).toBe("/shops");
+  });
 });

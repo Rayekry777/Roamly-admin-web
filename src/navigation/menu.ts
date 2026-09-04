@@ -1,4 +1,9 @@
-import { DataAnalysis, User } from "@element-plus/icons-vue";
+import {
+  DataAnalysis,
+  DocumentChecked,
+  Shop,
+  User,
+} from "@element-plus/icons-vue";
 import type { Component } from "vue";
 
 export interface MenuItem {
@@ -20,6 +25,18 @@ export const adminMenu: MenuItem[] = [
     label: "管理员账号",
     permission: "admin:user:manage",
     icon: User,
+  },
+  {
+    path: "/merchant-applications",
+    label: "商户申请",
+    permission: "admin:merchant-application:review",
+    icon: DocumentChecked,
+  },
+  {
+    path: "/shops",
+    label: "门店治理",
+    permission: "admin:shop:govern",
+    icon: Shop,
   },
 ];
 

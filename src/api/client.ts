@@ -39,6 +39,12 @@ function isErrorResult(value: unknown): value is ErrorResult {
   );
 }
 
+function handleUnauthorized(error: ApiError): void {
+  if (error.status !== 401) return;
+  clearAdminToken();
+  unauthorizedHandler?.();
+}
+
 export function mapHttpError(error: unknown): ApiError {
   if (error instanceof ApiError) return error;
   if (!(error instanceof AxiosError)) {
@@ -82,10 +88,7 @@ export function createHttpClient(
     },
     (error: unknown) => {
       const mapped = mapHttpError(error);
-      if (mapped.status === 401) {
-        clearAdminToken();
-        unauthorizedHandler?.();
-      }
+      handleUnauthorized(mapped);
       return Promise.reject(mapped);
     },
   );
@@ -93,6 +96,66 @@ export function createHttpClient(
 }
 
 export const http = createHttpClient();
+
+function readBlobText(blob: Blob): Promise<string> {
+  if (typeof blob.text === "function") return blob.text();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(blob);
+  });
+}
+
+export async function mapBinaryHttpError(error: unknown): Promise<ApiError> {
+  if (error instanceof ApiError) return error;
+  if (!(error instanceof AxiosError) || !error.response) {
+    return mapHttpError(error);
+  }
+  const body = error.response.data;
+  if (body instanceof Blob) {
+    try {
+      const parsed: unknown = JSON.parse(await readBlobText(body));
+      if (isErrorResult(parsed)) {
+        return new ApiError(
+          error.response.status,
+          parsed.code,
+          parsed.message,
+          parsed.fieldErrors ?? [],
+        );
+      }
+    } catch {
+      // 非 JSON 二进制错误由统一契约异常处理。
+    }
+    return new ApiError(
+      error.response.status,
+      "RESPONSE_CONTRACT_INVALID",
+      "服务响应格式异常",
+    );
+  }
+  return mapHttpError(error);
+}
+
+export async function getBinary(
+  path: string,
+  baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api",
+): Promise<Blob> {
+  try {
+    const response = await axios.get<Blob>(path, {
+      baseURL,
+      timeout: 10_000,
+      responseType: "blob",
+      headers: readAdminToken()
+        ? { Authorization: `Bearer ${readAdminToken()}` }
+        : undefined,
+    });
+    return response.data;
+  } catch (error) {
+    const mapped = await mapBinaryHttpError(error);
+    handleUnauthorized(mapped);
+    throw mapped;
+  }
+}
 
 export function errorMessage(error: unknown): string {
   return mapHttpError(error).message;

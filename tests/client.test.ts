@@ -5,6 +5,7 @@ import {
   ApiError,
   createHttpClient,
   mapHttpError,
+  mapBinaryHttpError,
   setUnauthorizedHandler,
 } from "@/api/client";
 import { TOKEN_KEY } from "@/utils/session";
@@ -109,4 +110,27 @@ describe("Roamly HTTP 适配器", () => {
       });
     },
   );
+
+  it("从二进制响应中的 JSON 解析对象存储错误", async () => {
+    const error = new AxiosError("storage unavailable");
+    error.response = {
+      data: new Blob([
+        JSON.stringify({
+          code: "OBJECT_STORAGE_UNAVAILABLE",
+          message: "对象存储暂不可用",
+          fieldErrors: [],
+        }),
+      ]),
+      status: 503,
+      statusText: "Service Unavailable",
+      headers: { "content-type": "application/json" },
+      config: { headers: {} } as InternalAxiosRequestConfig,
+    };
+
+    await expect(mapBinaryHttpError(error)).resolves.toMatchObject({
+      status: 503,
+      code: "OBJECT_STORAGE_UNAVAILABLE",
+      message: "对象存储暂不可用",
+    });
+  });
 });

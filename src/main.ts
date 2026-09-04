@@ -1,6 +1,7 @@
 import "element-plus/dist/index.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
+import "./styles/governance.css";
 
 import { createPinia } from "pinia";
 import { createApp } from "vue";

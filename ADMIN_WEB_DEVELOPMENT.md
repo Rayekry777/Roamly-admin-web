@@ -7,7 +7,7 @@ scope: 平台账号、审核、治理、财务页面与前端工程
 reviewStatus: accepted
 designStatus: 已冻结
 implementationStatus: 开发中
-projectStatus: 阶段 16 已实现
+projectStatus: 阶段 19 已实现
 frameworkBaseline: plus-ui v5.6.2-v2.6.2
 referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 ```
@@ -80,7 +80,7 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 
 ## 阶段 19 管理 Web 冻结设计
 
-阶段 19 完整服务端线协议以运行时 OpenAPI 与后端 [商户审核和门店治理详细设计](../Roamly/docs/stages/STAGE_19_MERCHANT_REVIEW_AND_SHOP_GOVERNANCE.md) 为准；本节只冻结本端信息结构、交互、客户端状态和自动化标准，当前实现状态仍为“未实现”。
+阶段 19 完整服务端线协议以运行时 OpenAPI 与后端 [商户审核和门店治理详细设计](../Roamly/docs/stages/STAGE_19_MERCHANT_REVIEW_AND_SHOP_GOVERNANCE.md) 为准；本节只管理本端信息结构、交互、客户端状态和自动化标准，当前能力已实现。
 
 ### 商户申请页
 
@@ -120,7 +120,7 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 - Vitest 覆盖请求与类型适配、查询规范化、中文状态、权限按钮、Blob URL 创建/释放、幂等键重放、409 刷新和 401/403/404/503。
 - Playwright 覆盖申请通过、申请驳回、私有图片、并发冲突、门店停用、选择性账号恢复以及平台管理员、审核员、财务管理员三类菜单。
 - 执行 TypeScript、ESLint、Prettier、Vitest 和生产构建；生成并检查 1440x900、1280x720、390x844 三个视口截图。
-- 后端真实 HTTP、数据库事务和 OpenAPI 尚未验收前，本端即使页面测试通过也不得把阶段 19 标记为“已实现”。
+- 阶段 19 已通过后端真实 HTTP、数据库事务、运行时 OpenAPI 与本端自动化联合验收。
 
 ## 请求与下载
 
@@ -135,7 +135,7 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 | ---: | --------------------------------------------- | ------ |
 |   15 | 独立仓库、plus-ui 裁剪、Roamly 主题和测试基座 | 已实现 |
 |   16 | 登录、强制改密、账号管理和基础仪表盘          | 已实现 |
-|   19 | 商户审核和门店治理                            | 未实现 |
+|   19 | 商户审核和门店治理                            | 已实现 |
 |   21 | 券审核和消费者视角预览                        | 未实现 |
 |   24 | 订单查询和财务异常退款                        | 未实现 |
 |   26 | 核销与撤销审计                                | 未实现 |
@@ -152,6 +152,8 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 - 浏览器截图覆盖 1440x900、1280x720、390x844，检查表格、抽屉、按钮和长文本无重叠、溢出或布局跳动。
 
 阶段 16 已完成：Vitest 4 个文件 16 项通过；Playwright 桌面与移动项目 7 项通过、1 项按项目条件跳过；三个冻结尺寸已生成截图并完成人工复核。
+
+阶段 19 已完成：Prettier、TypeScript、ESLint、6 个 Vitest 文件 24 项和生产构建通过；Playwright 桌面与移动项目 16 项通过、2 项按项目条件跳过，桌面项目统一生成并人工复核 1440x900、1280x720、390x844 三个冻结尺寸截图。
 
 ## 非目标
 

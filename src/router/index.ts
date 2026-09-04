@@ -46,6 +46,21 @@ export const routes: RouteRecordRaw[] = [
         meta: { title: "管理员账号", permission: "admin:user:manage" },
       },
       {
+        path: "merchant-applications",
+        name: "merchant-applications",
+        component: () => import("@/views/MerchantApplicationsView.vue"),
+        meta: {
+          title: "商户申请",
+          permission: "admin:merchant-application:review",
+        },
+      },
+      {
+        path: "shops",
+        name: "shops",
+        component: () => import("@/views/ShopsView.vue"),
+        meta: { title: "门店治理", permission: "admin:shop:govern" },
+      },
+      {
         path: "forbidden",
         name: "forbidden",
         component: () => import("@/views/ForbiddenView.vue"),
