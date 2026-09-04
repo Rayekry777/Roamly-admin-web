@@ -4,6 +4,7 @@ import {
   Files,
   Shop,
   User,
+  Money,
 } from "@element-plus/icons-vue";
 import type { Component } from "vue";
 
@@ -44,6 +45,12 @@ export const adminMenu: MenuItem[] = [
     label: "团购券审核",
     permission: "admin:voucher:review",
     icon: Files,
+  },
+  {
+    path: "/finance",
+    label: "资金账本",
+    permission: "admin:commission:manage",
+    icon: Money,
   },
 ];
 
