@@ -6,8 +6,8 @@ updatedAt: 2026-09-04
 scope: 平台账号、审核、治理、财务页面与前端工程
 reviewStatus: accepted
 designStatus: 已冻结
-implementationStatus: 未实现
-projectStatus: 契约仓库
+implementationStatus: 开发中
+projectStatus: 基础工程
 frameworkBaseline: plus-ui v5.6.2-v2.6.2
 referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 ```
@@ -25,12 +25,12 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 
 ## plus-ui 取舍
 
-| 处理 | 能力 |
-|---|---|
-| 保留并重做 | 布局、侧栏折叠、面包屑、标签页、路由守卫、Pinia、权限指令、分页、列显隐、筛选重置、表单弹窗、图片上传/预览、下载和 ECharts |
-| 完全改写 | 登录页、首页、Axios 请求层、用户 Store、静态菜单、错误提示、主题变量和业务页面 |
-| 延后接入 | SSE 审核刷新、Fesod 导出、WarmFlow 待办入口、运维系统外链 |
-| 删除 | 若依品牌、默认蓝色、主题色选择器、租户、部门岗位、动态菜单、通用字典、通知中心、OSS 管理、监控页面、代码生成、工作流设计器、社交登录、SSE 演示、请求加密、Quill 和演示页面 |
+| 处理       | 能力                                                                                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 保留并重做 | 布局、侧栏折叠、面包屑、标签页、路由守卫、Pinia、权限指令、分页、列显隐、筛选重置、表单弹窗、图片上传/预览、下载和 ECharts                                                 |
+| 完全改写   | 登录页、首页、Axios 请求层、用户 Store、静态菜单、错误提示、主题变量和业务页面                                                                                             |
+| 延后接入   | SSE 审核刷新、Fesod 导出、WarmFlow 待办入口、运维系统外链                                                                                                                  |
+| 删除       | 若依品牌、默认蓝色、主题色选择器、租户、部门岗位、动态菜单、通用字典、通知中心、OSS 管理、监控页面、代码生成、工作流设计器、社交登录、SSE 演示、请求加密、Quill 和演示页面 |
 
 本轮不引入 `vxe-table`，所有业务表格统一使用 Element Plus，避免维护两套列、筛选和选中状态。
 
@@ -53,21 +53,21 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 
 ## 信息架构
 
-| 路由 | 页面 | 所需权限 | 可见角色 |
-|---|---|---|---|
-| `/login` | 登录 | 公开 | 公开 |
-| `/dashboard` | 运营摘要 | `admin:dashboard:read`（运营摘要查看） | 全部管理员 |
-| `/admin-users` | 管理员账号 | `admin:user:manage`（管理员账号管理） | `PLATFORM_ADMIN`（平台超级管理员） |
-| `/merchant-applications` | 商户申请 | `admin:merchant-application:review`（商户申请审核） | 平台超级管理员、商户审核员 |
-| `/shops` | 门店治理 | `admin:shop:govern`（门店治理） | 平台超级管理员、商户审核员 |
-| `/voucher-reviews` | 券审核 | `admin:voucher:review`（团购券审核） | 平台超级管理员、商户审核员 |
-| `/orders` | 订单和支付 | `admin:trade:read`（订单、支付与核销查看） | 平台超级管理员、财务管理员 |
-| `/refunds` | 退款处理 | `admin:refund:manage`（退款处理） | 平台超级管理员、财务管理员 |
-| `/redemptions` | 核销与撤销 | `admin:trade:read`（订单、支付与核销查看） | 平台超级管理员、财务管理员 |
-| `/commission-rules` | 佣金规则 | `admin:commission:manage`（佣金规则与资金账本管理） | 平台超级管理员、财务管理员 |
-| `/ledger-entries` | 资金账本 | `admin:commission:manage`（佣金规则与资金账本管理） | 平台超级管理员、财务管理员 |
-| `/settlements` | 结算批次 | `admin:settlement:manage`（结算处理与失败重试） | 平台超级管理员、财务管理员 |
-| `/audit-logs` | 操作审计 | `admin:audit:read`（操作审计查看） | `PLATFORM_ADMIN`（平台超级管理员） |
+| 路由                     | 页面       | 所需权限                                            | 可见角色                           |
+| ------------------------ | ---------- | --------------------------------------------------- | ---------------------------------- |
+| `/login`                 | 登录       | 公开                                                | 公开                               |
+| `/dashboard`             | 运营摘要   | `admin:dashboard:read`（运营摘要查看）              | 全部管理员                         |
+| `/admin-users`           | 管理员账号 | `admin:user:manage`（管理员账号管理）               | `PLATFORM_ADMIN`（平台超级管理员） |
+| `/merchant-applications` | 商户申请   | `admin:merchant-application:review`（商户申请审核） | 平台超级管理员、商户审核员         |
+| `/shops`                 | 门店治理   | `admin:shop:govern`（门店治理）                     | 平台超级管理员、商户审核员         |
+| `/voucher-reviews`       | 券审核     | `admin:voucher:review`（团购券审核）                | 平台超级管理员、商户审核员         |
+| `/orders`                | 订单和支付 | `admin:trade:read`（订单、支付与核销查看）          | 平台超级管理员、财务管理员         |
+| `/refunds`               | 退款处理   | `admin:refund:manage`（退款处理）                   | 平台超级管理员、财务管理员         |
+| `/redemptions`           | 核销与撤销 | `admin:trade:read`（订单、支付与核销查看）          | 平台超级管理员、财务管理员         |
+| `/commission-rules`      | 佣金规则   | `admin:commission:manage`（佣金规则与资金账本管理） | 平台超级管理员、财务管理员         |
+| `/ledger-entries`        | 资金账本   | `admin:commission:manage`（佣金规则与资金账本管理） | 平台超级管理员、财务管理员         |
+| `/settlements`           | 结算批次   | `admin:settlement:manage`（结算处理与失败重试）     | 平台超级管理员、财务管理员         |
+| `/audit-logs`            | 操作审计   | `admin:audit:read`（操作审计查看）                  | `PLATFORM_ADMIN`（平台超级管理员） |
 
 ## 页面行为
 
@@ -87,18 +87,18 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 
 ## 本端阶段
 
-| 阶段 | 管理 Web 交付 | 状态 |
-|---:|---|---|
-| 15 | 独立仓库、plus-ui 裁剪、Roamly 主题和测试基座 | 未实现 |
-| 16 | 登录、强制改密、账号管理和基础仪表盘 | 未实现 |
-| 19 | 商户审核和门店治理 | 未实现 |
-| 21 | 券审核和消费者视角预览 | 未实现 |
-| 24 | 订单查询和财务异常退款 | 未实现 |
-| 26 | 核销与撤销审计 | 未实现 |
-| 27 | SSE 资源刷新 | 未实现 |
-| 28 | 佣金规则和账本 | 未实现 |
-| 29 | 结算、失败重试、操作审计和 XLSX 导出 | 未实现 |
-| 30 | 单元、E2E 和视觉验收 | 未实现 |
+| 阶段 | 管理 Web 交付                                 | 状态   |
+| ---: | --------------------------------------------- | ------ |
+|   15 | 独立仓库、plus-ui 裁剪、Roamly 主题和测试基座 | 已实现 |
+|   16 | 登录、强制改密、账号管理和基础仪表盘          | 未实现 |
+|   19 | 商户审核和门店治理                            | 未实现 |
+|   21 | 券审核和消费者视角预览                        | 未实现 |
+|   24 | 订单查询和财务异常退款                        | 未实现 |
+|   26 | 核销与撤销审计                                | 未实现 |
+|   27 | SSE 资源刷新                                  | 未实现 |
+|   28 | 佣金规则和账本                                | 未实现 |
+|   29 | 结算、失败重试、操作审计和 XLSX 导出          | 未实现 |
+|   30 | 单元、E2E 和视觉验收                          | 未实现 |
 
 ## 验收
 

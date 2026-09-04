@@ -1,0 +1,17 @@
+:root {
+  --roamly-primary: #ff5f57;
+  --roamly-primary-hover: #e94f49;
+  --roamly-accent: #8275ff;
+  --roamly-text: #242331;
+  --roamly-muted: #8f8d99;
+  --roamly-bg: #f4f5fb;
+  --roamly-surface: #ffffff;
+  --roamly-border: #ececf3;
+  --roamly-control-radius: 6px;
+  --roamly-content-radius: 8px;
+  --roamly-shadow: 0 10px 28px rgb(45 42 80 / 8%);
+  --el-color-primary: #ff5f57;
+  --el-color-primary-light-3: #ff8781;
+  --el-color-primary-dark-2: #e94f49;
+  --el-border-radius-base: 6px;
+}
