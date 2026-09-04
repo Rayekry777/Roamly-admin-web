@@ -1,6 +1,7 @@
 import {
   DataAnalysis,
   DocumentChecked,
+  Files,
   Shop,
   User,
 } from "@element-plus/icons-vue";
@@ -37,6 +38,12 @@ export const adminMenu: MenuItem[] = [
     label: "门店治理",
     permission: "admin:shop:govern",
     icon: Shop,
+  },
+  {
+    path: "/voucher-reviews",
+    label: "团购券审核",
+    permission: "admin:voucher:review",
+    icon: Files,
   },
 ];
 

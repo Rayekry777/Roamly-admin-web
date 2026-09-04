@@ -25,6 +25,9 @@ describe("静态菜单与按钮权限", () => {
         "admin:shop:govern",
       ]).map((item) => item.label),
     ).toEqual(["运营摘要", "商户申请", "门店治理"]);
+    expect(
+      visibleMenu(["admin:voucher:review"]).map((item) => item.label),
+    ).toEqual(["团购券审核"]);
   });
 
   it("权限指令移除未授权命令", () => {

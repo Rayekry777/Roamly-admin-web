@@ -31,6 +31,7 @@ describe("Roamly 管理端工程基线", () => {
         "admin-users",
         "merchant-applications",
         "shops",
+        "voucher-reviews",
         "forbidden",
       ]),
     );

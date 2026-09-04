@@ -61,6 +61,12 @@ export const routes: RouteRecordRaw[] = [
         meta: { title: "门店治理", permission: "admin:shop:govern" },
       },
       {
+        path: "voucher-reviews",
+        name: "voucher-reviews",
+        component: () => import("@/views/VoucherReviewsView.vue"),
+        meta: { title: "团购券审核", permission: "admin:voucher:review" },
+      },
+      {
         path: "forbidden",
         name: "forbidden",
         component: () => import("@/views/ForbiddenView.vue"),
