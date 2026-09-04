@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { routes } from "@/router";
 import { roamlyTheme } from "@/theme/tokens";
 
-describe("阶段 15 工程基线", () => {
+describe("Roamly 管理端工程基线", () => {
   it("使用冻结的 Roamly 视觉令牌", () => {
     expect(roamlyTheme).toMatchObject({
       primary: "#ff5f57",
@@ -18,7 +18,19 @@ describe("阶段 15 工程基线", () => {
     });
   });
 
-  it("只注册阶段 15 基础入口", () => {
-    expect(routes.map((route) => route.name)).toEqual(["foundation"]);
+  it("注册阶段 16 管理页面", () => {
+    const names = routes.flatMap((route) => [
+      route.name,
+      ...(route.children?.map((child) => child.name) ?? []),
+    ]);
+    expect(names).toEqual(
+      expect.arrayContaining([
+        "login",
+        "force-password",
+        "dashboard",
+        "admin-users",
+        "forbidden",
+      ]),
+    );
   });
 });
