@@ -88,6 +88,20 @@
   padding: 0;
 }
 
+.governance-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.floating-refresh {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 3;
+  display: none;
+}
+
 .governance-drawer .el-drawer__header {
   padding: 18px 22px 14px;
   margin: 0;
@@ -324,6 +338,10 @@
   .governance-drawer__actions .el-button {
     width: 100%;
     margin: 0;
+  }
+
+  .floating-refresh {
+    display: inline-flex;
   }
 
   .governance-drawer__actions--review > .el-button:last-child {

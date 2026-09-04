@@ -73,6 +73,36 @@ export const routes: RouteRecordRaw[] = [
         meta: { title: "资金账本", permission: "admin:commission:manage" },
       },
       {
+        path: "orders",
+        name: "orders",
+        component: () => import("@/views/OrdersView.vue"),
+        meta: { title: "订单查询", permission: "admin:trade:read" },
+      },
+      {
+        path: "refunds",
+        name: "refunds",
+        component: () => import("@/views/RefundsView.vue"),
+        meta: { title: "退款处理", permission: "admin:refund:manage" },
+      },
+      {
+        path: "redemptions",
+        name: "redemptions",
+        component: () => import("@/views/RedemptionsView.vue"),
+        meta: { title: "核销审计", permission: "admin:trade:read" },
+      },
+      {
+        path: "settlements",
+        name: "settlements",
+        component: () => import("@/views/SettlementsView.vue"),
+        meta: { title: "结算批次", permission: "admin:settlement:manage" },
+      },
+      {
+        path: "audit-logs",
+        name: "audit-logs",
+        component: () => import("@/views/AuditLogsView.vue"),
+        meta: { title: "操作审计", permission: "admin:audit:read" },
+      },
+      {
         path: "forbidden",
         name: "forbidden",
         component: () => import("@/views/ForbiddenView.vue"),

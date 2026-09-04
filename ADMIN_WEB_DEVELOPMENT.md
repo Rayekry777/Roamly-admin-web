@@ -1,13 +1,13 @@
 # Roamly 管理 Web 契约
 
 ```yaml
-version: 6
-updatedAt: 2026-09-04
+version: 7
+updatedAt: 2026-09-05
 scope: 平台账号、审核、治理、财务页面与前端工程
 reviewStatus: accepted
 designStatus: 已冻结
-implementationStatus: 开发中
-projectStatus: 阶段 21 已实现
+implementationStatus: 已实现（Demo 范围）
+projectStatus: 阶段 30 已实现
 frameworkBaseline: plus-ui v5.6.2-v2.6.2
 referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 ```
@@ -138,12 +138,12 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 |   16 | 登录、强制改密、账号管理和基础仪表盘          | 已实现 |
 |   19 | 商户审核和门店治理                            | 已实现 |
 |   21 | 券审核和消费者视角预览                        | 已实现 |
-|   24 | 订单查询和财务异常退款                        | 未实现 |
-|   26 | 核销与撤销审计                                | 未实现 |
-|   27 | SSE 资源刷新                                  | 未实现 |
-|   28 | 佣金规则和账本                                | 未实现 |
-|   29 | 结算、失败重试、操作审计和 XLSX 导出          | 未实现 |
-|   30 | 单元、E2E 和视觉验收                          | 未实现 |
+|   24 | 订单查询和财务异常退款                        | 已实现 |
+|   26 | 核销与撤销审计                                | 已实现 |
+|   27 | SSE 资源刷新                                  | 已实现 |
+|   28 | 佣金规则和账本                                | 已实现 |
+|   29 | 结算、失败重试、操作审计和 XLSX 导出          | 已实现 |
+|   30 | 单元、E2E 和视觉验收                          | 已实现（自动化；真机未确认） |
 
 ## 验收
 

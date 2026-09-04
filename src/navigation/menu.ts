@@ -5,6 +5,10 @@ import {
   Shop,
   User,
   Money,
+  Tickets,
+  Refresh,
+  Collection,
+  Document,
 } from "@element-plus/icons-vue";
 import type { Component } from "vue";
 
@@ -51,6 +55,36 @@ export const adminMenu: MenuItem[] = [
     label: "资金账本",
     permission: "admin:commission:manage",
     icon: Money,
+  },
+  {
+    path: "/orders",
+    label: "订单查询",
+    permission: "admin:trade:read",
+    icon: Tickets,
+  },
+  {
+    path: "/refunds",
+    label: "退款处理",
+    permission: "admin:refund:manage",
+    icon: Refresh,
+  },
+  {
+    path: "/redemptions",
+    label: "核销审计",
+    permission: "admin:trade:read",
+    icon: Collection,
+  },
+  {
+    path: "/settlements",
+    label: "结算批次",
+    permission: "admin:settlement:manage",
+    icon: Money,
+  },
+  {
+    path: "/audit-logs",
+    label: "操作审计",
+    permission: "admin:audit:read",
+    icon: Document,
   },
 ];
 
