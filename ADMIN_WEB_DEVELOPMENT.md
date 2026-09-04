@@ -1,7 +1,7 @@
 # Roamly 管理 Web 契约
 
 ```yaml
-version: 7
+version: 8
 updatedAt: 2026-09-05
 scope: 平台账号、审核、治理、财务页面与前端工程
 reviewStatus: accepted
@@ -129,6 +129,7 @@ referenceCommit: d0d451967676707021b9857df529c395b27e90a7
 - Axios 不兼容若依数字码，不自动把 GET 参数拼接成自定义字符串，不实现前端 500ms 请求体判重，不启用 AES/RSA 请求加密。
 - 401、403、404、409、429、503 使用独立全局处理；业务错误保留后端字符串错误码。
 - XLSX 导出调用各集合的 `POST .../export`，请求体复用当前筛选条件；成功保存二进制，JSON 错误响应按统一错误结构显示。
+- v8 收口：账本页 `/ledger-entries` 已提供带 `Download` 图标的导出按钮，调用 `POST /v1/admin/ledger/export`；导出期间按钮锁定，二进制成功保存为 `roamly-ledger.xlsx`，`EXPORT_RESOURCE_INVALID`（导出资源无效）和 `EXPORT_TOO_LARGE`（导出数据超限）等 JSON 错误沿用统一提示。
 
 ## 本端阶段
 
