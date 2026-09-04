@@ -73,11 +73,25 @@ function onRealtimeEvent(event: AdminRealtimeEvent): void {
     MERCHANT_REVIEWED: "商户审核",
     SETTLEMENT_UPDATED: "结算批次",
   };
-  ElNotification({ title: "数据已更新", message: `${labels[event.type] ?? "业务数据"}发生变化，请刷新当前列表`, type: "info", duration: 3500 });
-  window.dispatchEvent(new CustomEvent("roamly-admin-realtime", { detail: event }));
+  ElNotification({
+    title: "数据已更新",
+    message: `${labels[event.type] ?? "业务数据"}发生变化，请刷新当前列表`,
+    type: "info",
+    duration: 3500,
+  });
+  window.dispatchEvent(
+    new CustomEvent("roamly-admin-realtime", { detail: event }),
+  );
 }
 
-onMounted(() => { stopRealtime = startAdminRealtime({ onEvent: onRealtimeEvent, onState: (state) => { realtimeState.value = state; } }); });
+onMounted(() => {
+  stopRealtime = startAdminRealtime({
+    onEvent: onRealtimeEvent,
+    onState: (state) => {
+      realtimeState.value = state;
+    },
+  });
+});
 onBeforeUnmount(() => stopRealtime?.());
 </script>
 
@@ -136,7 +150,13 @@ onBeforeUnmount(() => stopRealtime?.());
             <ElBreadcrumbItem>{{ route.meta.title }}</ElBreadcrumbItem>
           </ElBreadcrumb>
         </div>
-        <span class="admin-realtime-state" :class="`admin-realtime-state--${realtimeState}`">{{ realtimeState === "connected" ? "实时已连接" : "实时连接重试中" }}</span>
+        <span
+          class="admin-realtime-state"
+          :class="`admin-realtime-state--${realtimeState}`"
+          >{{
+            realtimeState === "connected" ? "实时已连接" : "实时连接重试中"
+          }}</span
+        >
         <ElDropdown trigger="click">
           <ElButton class="admin-user-menu">
             <span class="admin-user-menu__avatar">{{

@@ -9,7 +9,11 @@ import {
   ElTag,
 } from "element-plus";
 import { onMounted, ref } from "vue";
-import { exportAdminResource, listAdminSettlements, retryAdminSettlement } from "@/api/operations";
+import {
+  exportAdminResource,
+  listAdminSettlements,
+  retryAdminSettlement,
+} from "@/api/operations";
 import { errorMessage } from "@/api/client";
 import { saveBlob } from "@/utils/download";
 import type { AdminSettlement } from "@/types/operations";
@@ -43,7 +47,16 @@ async function retry(row: AdminSettlement): Promise<void> {
     retrying.value = undefined;
   }
 }
-async function exportRows(): Promise<void> { try { saveBlob(await exportAdminResource("settlements"), "roamly-settlements.xlsx"); } catch (error) { ElMessage.error(errorMessage(error)); } }
+async function exportRows(): Promise<void> {
+  try {
+    saveBlob(
+      await exportAdminResource("settlements"),
+      "roamly-settlements.xlsx",
+    );
+  } catch (error) {
+    ElMessage.error(errorMessage(error));
+  }
+}
 function tag(value: string) {
   return value === "SUCCEEDED"
     ? "success"
@@ -63,7 +76,10 @@ onMounted(load);
         <p>资金管理</p>
         <h1>结算批次</h1>
       </div>
-      <div class="governance-heading__actions"><ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton><span class="governance-heading__meta">共 {{ total }} 批</span></div>
+      <div class="governance-heading__actions">
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
+        ><span class="governance-heading__meta">共 {{ total }} 批</span>
+      </div>
     </header>
     <section class="governance-table">
       <ElTable

@@ -100,8 +100,11 @@ async function decide(action: "approve" | "retry" | "reject"): Promise<void> {
   }
 }
 async function exportRows(): Promise<void> {
-  try { saveBlob(await exportAdminResource("refunds"), "roamly-refunds.xlsx"); }
-  catch (error) { ElMessage.error(errorMessage(error)); }
+  try {
+    saveBlob(await exportAdminResource("refunds"), "roamly-refunds.xlsx");
+  } catch (error) {
+    ElMessage.error(errorMessage(error));
+  }
 }
 onMounted(load);
 </script>
@@ -112,7 +115,10 @@ onMounted(load);
         <p>交易监管</p>
         <h1>退款处理</h1>
       </div>
-      <div class="governance-heading__actions"><ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton><span class="governance-heading__meta">共 {{ total }} 笔</span></div>
+      <div class="governance-heading__actions">
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
+        ><span class="governance-heading__meta">共 {{ total }} 笔</span>
+      </div>
     </header>
     <section class="governance-filter">
       <ElSelect

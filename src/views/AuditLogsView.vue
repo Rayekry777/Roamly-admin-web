@@ -37,7 +37,13 @@ function label(value: string) {
   return value === "SUCCEEDED" ? "成功" : value === "FAILED" ? "失败" : value;
 }
 onMounted(load);
-async function exportRows(): Promise<void> { try { saveBlob(await exportAdminResource("audits"), "roamly-audits.xlsx"); } catch (error) { ElMessage.error(errorMessage(error)); } }
+async function exportRows(): Promise<void> {
+  try {
+    saveBlob(await exportAdminResource("audits"), "roamly-audits.xlsx");
+  } catch (error) {
+    ElMessage.error(errorMessage(error));
+  }
+}
 </script>
 <template>
   <section class="governance-page">
@@ -46,7 +52,10 @@ async function exportRows(): Promise<void> { try { saveBlob(await exportAdminRes
         <p>安全与合规</p>
         <h1>操作审计</h1>
       </div>
-      <div class="governance-heading__actions"><ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton><span class="governance-heading__meta">共 {{ total }} 条</span></div>
+      <div class="governance-heading__actions">
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
+        ><span class="governance-heading__meta">共 {{ total }} 条</span>
+      </div>
     </header>
     <section class="governance-table">
       <ElTable

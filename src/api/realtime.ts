@@ -1,6 +1,9 @@
 import { http } from "./client";
 
-interface EventTicket { ticket: string; expiresAt: string }
+interface EventTicket {
+  ticket: string;
+  expiresAt: string;
+}
 export interface AdminRealtimeEvent {
   eventId?: string;
   type: string;
@@ -19,7 +22,15 @@ export function startAdminRealtime(options: {
   let retryTimer: ReturnType<typeof setTimeout> | undefined;
   let fallbackTimer: ReturnType<typeof setInterval> | undefined;
   const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "/api";
-  const eventTypes = ["connected", "PAYMENT_UPDATED", "REFUND_UPDATED", "VOUCHER_REDEEMED", "REDEMPTION_REVERSED", "MERCHANT_REVIEWED", "SETTLEMENT_UPDATED"];
+  const eventTypes = [
+    "connected",
+    "PAYMENT_UPDATED",
+    "REFUND_UPDATED",
+    "VOUCHER_REDEEMED",
+    "REDEMPTION_REVERSED",
+    "MERCHANT_REVIEWED",
+    "SETTLEMENT_UPDATED",
+  ];
 
   const clearFallback = () => {
     if (fallbackTimer) clearInterval(fallbackTimer);
@@ -28,8 +39,15 @@ export function startAdminRealtime(options: {
   const schedule = (delay = 2_000) => {
     if (stopped || retryTimer) return;
     options.onState?.("fallback");
-    if (!fallbackTimer) fallbackTimer = setInterval(() => options.onEvent({ type: "FALLBACK_REFRESH" }), 30_000);
-    retryTimer = setTimeout(() => { retryTimer = undefined; void connect(); }, delay);
+    if (!fallbackTimer)
+      fallbackTimer = setInterval(
+        () => options.onEvent({ type: "FALLBACK_REFRESH" }),
+        30_000,
+      );
+    retryTimer = setTimeout(() => {
+      retryTimer = undefined;
+      void connect();
+    }, delay);
   };
   const connect = async () => {
     if (stopped) return;
@@ -39,12 +57,25 @@ export function startAdminRealtime(options: {
       const url = `${baseUrl.replace(/\/$/, "")}/v1/admin/events?ticket=${encodeURIComponent(ticket.ticket)}`;
       source = new EventSource(url);
       const handle = (message: MessageEvent<string>) => {
-        try { options.onEvent(JSON.parse(message.data) as AdminRealtimeEvent); } catch { /* 忽略非契约事件 */ }
+        try {
+          options.onEvent(JSON.parse(message.data) as AdminRealtimeEvent);
+        } catch {
+          /* 忽略非契约事件 */
+        }
       };
       eventTypes.forEach((type) => source?.addEventListener(type, handle));
-      source.onopen = () => { clearFallback(); options.onState?.("connected"); };
-      source.onerror = () => { source?.close(); source = undefined; schedule(); };
-    } catch { schedule(); }
+      source.onopen = () => {
+        clearFallback();
+        options.onState?.("connected");
+      };
+      source.onerror = () => {
+        source?.close();
+        source = undefined;
+        schedule();
+      };
+    } catch {
+      schedule();
+    }
   };
   void connect();
   return () => {

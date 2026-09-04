@@ -13,7 +13,9 @@ import {
 
 describe("阶段 24-30 管理端查询 API", () => {
   beforeEach(() => {
-    get.mockReset().mockResolvedValue({ items: [], page: 1, size: 20, total: 0 });
+    get
+      .mockReset()
+      .mockResolvedValue({ items: [], page: 1, size: 20, total: 0 });
     post.mockReset().mockResolvedValue({});
   });
 
