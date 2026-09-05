@@ -52,8 +52,6 @@ export interface AdminRedemption {
   status: string;
   useCount: number;
   remainingUseCount?: number;
-  consumptionAmount: number;
-  discountAmount: number;
   redeemedTime?: string;
   reversedTime?: string;
   reversalReason?: string;
