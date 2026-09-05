@@ -13,6 +13,7 @@ import { exportAdminResource, listAdminRedemptions } from "@/api/operations";
 import { errorMessage } from "@/api/client";
 import { saveBlob } from "@/utils/download";
 import type { AdminRedemption } from "@/types/operations";
+import PageHeader from "@/components/admin/PageHeader.vue";
 const rows = ref<AdminRedemption[]>([]);
 const total = ref(0);
 const page = ref(1);
@@ -58,16 +59,11 @@ async function exportRows(): Promise<void> {
 </script>
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>履约监管</p>
-        <h1>核销审计</h1>
-      </div>
-      <div class="governance-heading__actions">
-        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ total }} 条</span>
-      </div>
-    </header>
+    <PageHeader eyebrow="履约监管" title="核销审计" :meta="`共 ${total} 条`">
+      <template #actions>
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
+      </template>
+    </PageHeader>
     <section class="governance-table">
       <ElTable
         v-loading="loading"

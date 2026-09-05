@@ -23,6 +23,7 @@ import {
   exportAdminResource,
 } from "@/api/operations";
 import { errorMessage } from "@/api/client";
+import PageHeader from "@/components/admin/PageHeader.vue";
 import { saveBlob } from "@/utils/download";
 import type { AdminRefund } from "@/types/operations";
 
@@ -110,16 +111,11 @@ onMounted(load);
 </script>
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>交易监管</p>
-        <h1>退款处理</h1>
-      </div>
-      <div class="governance-heading__actions">
-        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ total }} 笔</span>
-      </div>
-    </header>
+    <PageHeader eyebrow="交易监管" title="退款处理" :meta="`共 ${total} 笔`">
+      <template #actions>
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
+      </template>
+    </PageHeader>
     <section class="governance-filter">
       <ElSelect
         v-model="status"

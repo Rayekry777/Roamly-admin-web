@@ -16,6 +16,7 @@ import {
 } from "@/api/operations";
 import { errorMessage } from "@/api/client";
 import { saveBlob } from "@/utils/download";
+import PageHeader from "@/components/admin/PageHeader.vue";
 import type { AdminSettlement } from "@/types/operations";
 const rows = ref<AdminSettlement[]>([]);
 const total = ref(0);
@@ -71,16 +72,11 @@ onMounted(load);
 </script>
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>资金管理</p>
-        <h1>结算批次</h1>
-      </div>
-      <div class="governance-heading__actions">
-        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ total }} 批</span>
-      </div>
-    </header>
+    <PageHeader eyebrow="资金管理" title="结算批次" :meta="`共 ${total} 批`">
+      <template #actions>
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
+      </template>
+    </PageHeader>
     <section class="governance-table">
       <ElTable
         v-loading="loading"

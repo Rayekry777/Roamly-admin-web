@@ -26,6 +26,66 @@ body {
 }
 
 button,
+a,
+input,
+textarea,
+select,
+.el-button,
+.el-input__wrapper,
+.el-select__wrapper {
+  transition:
+    color var(--roamly-motion-fast) ease,
+    background-color var(--roamly-motion-fast) ease,
+    border-color var(--roamly-motion-fast) ease,
+    box-shadow var(--roamly-motion-fast) ease,
+    transform var(--roamly-motion-fast) ease;
+}
+
+:where(button, a, input, textarea, select, .el-button):focus-visible {
+  outline: 3px solid rgb(130 117 255 / 26%);
+  outline-offset: 2px;
+}
+
+.route-enter-active,
+.route-leave-active {
+  transition:
+    opacity var(--roamly-motion-base) ease,
+    transform var(--roamly-motion-base) ease;
+}
+
+.route-enter-from,
+.route-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.list-stagger {
+  animation: roamly-list-enter var(--roamly-motion-base) ease both;
+}
+
+@keyframes roamly-list-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+button,
 input,
 textarea,
 select {

@@ -27,6 +27,7 @@ import type {
   AdminOrderDetail,
   OrderStatus,
 } from "@/types/operations";
+import PageHeader from "@/components/admin/PageHeader.vue";
 
 const rows = ref<AdminOrder[]>([]);
 const total = ref(0);
@@ -100,16 +101,11 @@ onMounted(load);
 
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>交易监管</p>
-        <h1>订单查询</h1>
-      </div>
-      <div class="governance-heading__actions">
-        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ total }} 笔</span>
-      </div>
-    </header>
+    <PageHeader eyebrow="交易监管" title="订单查询" :meta="`共 ${total} 笔`">
+      <template #actions>
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
+      </template>
+    </PageHeader>
     <section class="governance-filter">
       <ElSelect
         v-model="status"

@@ -37,6 +37,7 @@ import {
 } from "@/api/admin";
 import { ApiError, errorMessage } from "@/api/client";
 import type { AdminRole, AdminStatus, AdminUser } from "@/types/admin";
+import PageHeader from "@/components/admin/PageHeader.vue";
 
 const roleOptions: { value: AdminRole; label: string }[] = [
   { value: "PLATFORM_ADMIN", label: "平台超级管理员" },
@@ -284,15 +285,13 @@ onMounted(load);
 
 <template>
   <section class="admin-users-page">
-    <header class="page-heading">
-      <div>
-        <p>账号与权限</p>
-        <h1>管理员账号</h1>
-      </div>
-      <ElButton type="primary" :icon="Plus" @click="openCreate"
-        >新增管理员</ElButton
-      >
-    </header>
+    <PageHeader eyebrow="账号与权限" title="管理员账号">
+      <template #actions>
+        <ElButton type="primary" :icon="Plus" @click="openCreate"
+          >新增管理员</ElButton
+        >
+      </template>
+    </PageHeader>
 
     <section class="filter-band" aria-label="管理员筛选">
       <ElInput

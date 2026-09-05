@@ -57,7 +57,6 @@ async function submit(): Promise<void> {
         <div><strong>Roamly</strong><span>平台管理</span></div>
       </div>
       <div class="login-copy">
-        <p>ROAMLY OPERATIONS</p>
         <h1 id="login-title">登录运营工作台</h1>
       </div>
       <ElForm
@@ -124,6 +123,7 @@ async function submit(): Promise<void> {
   border: 1px solid var(--roamly-border);
   border-radius: var(--roamly-content-radius);
   box-shadow: var(--roamly-shadow);
+  animation: login-panel-enter 240ms ease both;
 }
 
 .login-brand {
@@ -179,6 +179,22 @@ async function submit(): Promise<void> {
 .login-submit {
   width: 100%;
   margin-top: 8px;
+}
+
+.login-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgb(255 95 87 / 24%);
+}
+
+@keyframes login-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 480px) {

@@ -2,6 +2,7 @@
 import { Key, Lock, User, UserFilled } from "@element-plus/icons-vue";
 import { computed } from "vue";
 
+import PageHeader from "@/components/admin/PageHeader.vue";
 import { useAuthStore } from "@/stores/auth";
 
 const auth = useAuthStore();
@@ -35,19 +36,18 @@ const metrics = computed(() => [
 
 <template>
   <section class="dashboard-page">
-    <header class="page-heading">
-      <div>
-        <p>今日工作台</p>
-        <h1>{{ auth.current?.displayName }}，欢迎回来</h1>
-      </div>
-      <span class="page-heading__date">阶段 16 · 管理基础</span>
-    </header>
+    <PageHeader
+      eyebrow="今日工作台"
+      :title="`${auth.current?.displayName ?? ''}，欢迎回来`"
+      meta="平台管理 · 实时工作区"
+    />
 
     <div class="metric-grid">
       <article
-        v-for="metric in metrics"
+        v-for="(metric, index) in metrics"
         :key="metric.label"
-        class="metric-item"
+        class="metric-item list-stagger"
+        :style="{ animationDelay: `${index * 35}ms` }"
       >
         <span class="metric-item__icon" :data-tone="metric.tone"
           ><component :is="metric.icon"
@@ -75,37 +75,19 @@ const metrics = computed(() => [
         >
       </div>
     </section>
+
+    <section class="dashboard-status">
+      <div>
+        <p>系统状态</p>
+        <h2>管理端服务运行正常</h2>
+        <span>权限、会话和实时刷新均已按当前账号边界启用。</span>
+      </div>
+      <span class="dashboard-status__badge"><i />已连接</span>
+    </section>
   </section>
 </template>
 
 <style scoped>
-.page-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 22px;
-}
-
-.page-heading p,
-.page-heading h1 {
-  margin: 0;
-}
-
-.page-heading p {
-  margin-bottom: 5px;
-  color: var(--roamly-muted);
-  font-size: 13px;
-}
-
-.page-heading h1 {
-  font-size: 24px;
-}
-
-.page-heading__date {
-  color: var(--roamly-muted);
-  font-size: 13px;
-}
-
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -121,6 +103,13 @@ const metrics = computed(() => [
   border: 1px solid var(--roamly-border);
   border-radius: 8px;
   gap: 13px;
+  box-shadow: 0 1px 0 rgb(45 42 80 / 2%);
+}
+
+.metric-item:hover {
+  border-color: rgb(255 95 87 / 35%);
+  box-shadow: var(--roamly-shadow-sm);
+  transform: translateY(-2px);
 }
 
 .metric-item__icon {
@@ -170,6 +159,59 @@ const metrics = computed(() => [
   border-radius: 8px;
 }
 
+.dashboard-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #fff 0%, #fff9f8 100%);
+  border: 1px solid rgb(255 95 87 / 18%);
+  border-radius: 8px;
+}
+
+.dashboard-status p,
+.dashboard-status h2,
+.dashboard-status span {
+  margin: 0;
+}
+
+.dashboard-status p {
+  color: var(--roamly-muted);
+  font-size: 12px;
+}
+
+.dashboard-status h2 {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.dashboard-status div > span {
+  display: block;
+  margin-top: 6px;
+  color: var(--roamly-muted);
+  font-size: 12px;
+}
+
+.dashboard-status__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  color: var(--roamly-success);
+  background: var(--roamly-success-soft);
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dashboard-status__badge i {
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
 .dashboard-section__title {
   display: flex;
   align-items: center;
@@ -213,15 +255,6 @@ const metrics = computed(() => [
   }
 }
 @media (max-width: 560px) {
-  .page-heading {
-    align-items: flex-start;
-  }
-  .page-heading h1 {
-    font-size: 20px;
-  }
-  .page-heading__date {
-    display: none;
-  }
   .metric-grid {
     grid-template-columns: 1fr;
   }
@@ -230,6 +263,11 @@ const metrics = computed(() => [
   }
   .dashboard-section {
     padding: 18px;
+  }
+  .dashboard-status {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
   }
   .permission-list code {
     max-width: 100%;

@@ -32,6 +32,7 @@ import {
   rejectVoucherReview,
 } from "@/api/voucher-review";
 import { ApiError, errorMessage } from "@/api/client";
+import PageHeader from "@/components/admin/PageHeader.vue";
 import type {
   AdminVoucherReviewDetail,
   AdminVoucherReviewListItem,
@@ -232,13 +233,11 @@ onMounted(load);
 
 <template>
   <section class="governance-page voucher-reviews-page">
-    <header class="governance-heading">
-      <div>
-        <p>券审核与销售治理</p>
-        <h1>团购券审核</h1>
-      </div>
-      <span class="governance-heading__meta">共 {{ total }} 条券</span>
-    </header>
+    <PageHeader
+      eyebrow="券审核与销售治理"
+      title="团购券审核"
+      :meta="`共 ${total} 条券`"
+    />
 
     <section class="governance-filter" aria-label="团购券审核筛选">
       <ElSelect v-model="query.status" clearable placeholder="全部审核状态">

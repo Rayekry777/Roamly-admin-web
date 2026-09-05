@@ -10,6 +10,8 @@ import {
 } from "element-plus";
 import { exportLedger, listLedger, type LedgerPage } from "@/api/finance";
 import { saveBlob } from "@/utils/download";
+import PageHeader from "@/components/admin/PageHeader.vue";
+import DataTableFrame from "@/components/admin/DataTableFrame.vue";
 const loading = ref(false);
 const exporting = ref(false);
 const data = ref<LedgerPage>({ items: [], page: 1, size: 20, total: 0 });
@@ -37,12 +39,12 @@ async function exportRows(): Promise<void> {
 </script>
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>资金与佣金</p>
-        <h1>账本分录</h1>
-      </div>
-      <div class="governance-heading__actions">
+    <PageHeader
+      eyebrow="资金与佣金"
+      title="账本分录"
+      :meta="`共 ${data.total} 条`"
+    >
+      <template #actions>
         <ElButton
           type="primary"
           plain
@@ -50,10 +52,10 @@ async function exportRows(): Promise<void> {
           :loading="exporting"
           @click="exportRows"
           >导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ data.total }} 条</span>
-      </div>
-    </header>
-    <section class="governance-table">
+        >
+      </template>
+    </PageHeader>
+    <DataTableFrame :loading="loading">
       <ElTable
         v-loading="loading"
         :data="data.items"
@@ -85,6 +87,6 @@ async function exportRows(): Promise<void> {
           label="发生时间"
           min-width="180"
       /></ElTable>
-    </section>
+    </DataTableFrame>
   </section>
 </template>

@@ -33,6 +33,7 @@ import {
 } from "@/api/governance";
 import { ApiError, errorMessage } from "@/api/client";
 import BusinessHoursList from "@/components/BusinessHoursList.vue";
+import PageHeader from "@/components/admin/PageHeader.vue";
 import type {
   AdminShopDetail,
   AdminShopListItem,
@@ -223,13 +224,11 @@ onMounted(load);
 
 <template>
   <section class="governance-page shops-page">
-    <header class="governance-heading">
-      <div>
-        <p>经营秩序</p>
-        <h1>门店治理</h1>
-      </div>
-      <span class="governance-heading__meta">共 {{ total }} 家门店</span>
-    </header>
+    <PageHeader
+      eyebrow="经营秩序"
+      title="门店治理"
+      :meta="`共 ${total} 家门店`"
+    />
 
     <section
       class="governance-filter governance-filter--shops"

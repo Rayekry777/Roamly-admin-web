@@ -36,6 +36,7 @@ import {
 } from "@/api/governance";
 import { ApiError, errorMessage } from "@/api/client";
 import BusinessHoursList from "@/components/BusinessHoursList.vue";
+import PageHeader from "@/components/admin/PageHeader.vue";
 import type {
   AdminBusinessMedia,
   MerchantApplicationDetail,
@@ -314,13 +315,11 @@ onBeforeUnmount(releaseMediaUrls);
 
 <template>
   <section class="governance-page merchant-applications-page">
-    <header class="governance-heading">
-      <div>
-        <p>入驻与资质</p>
-        <h1>商户申请</h1>
-      </div>
-      <span class="governance-heading__meta">共 {{ total }} 条申请</span>
-    </header>
+    <PageHeader
+      eyebrow="入驻与资质"
+      title="商户申请"
+      :meta="`共 ${total} 条申请`"
+    />
 
     <section class="governance-filter" aria-label="商户申请筛选">
       <ElSelect v-model="query.status" clearable placeholder="全部状态">

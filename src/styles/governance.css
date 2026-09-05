@@ -2,6 +2,10 @@
   min-width: 0;
 }
 
+.governance-page .el-button:not(.is-link) {
+  font-weight: 600;
+}
+
 .governance-heading {
   display: flex;
   align-items: flex-end;
@@ -42,8 +46,9 @@
   padding: 14px;
   background: var(--roamly-surface);
   border: 1px solid var(--roamly-border);
-  border-radius: 8px;
+  border-radius: var(--roamly-content-radius);
   gap: 10px;
+  box-shadow: 0 1px 0 rgb(45 42 80 / 2%);
 }
 
 .governance-filter--shops {
@@ -62,7 +67,25 @@
   overflow: hidden;
   background: var(--roamly-surface);
   border: 1px solid var(--roamly-border);
-  border-radius: 8px;
+  border-radius: var(--roamly-content-radius);
+  box-shadow: 0 1px 0 rgb(45 42 80 / 2%);
+}
+
+.governance-table .el-table {
+  --el-table-border-color: var(--roamly-border);
+  --el-table-header-bg-color: #fafaff;
+  --el-table-row-hover-bg-color: #fff8f7;
+}
+
+.governance-table .el-table th.el-table__cell {
+  color: var(--roamly-muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.governance-table .el-table td.el-table__cell,
+.governance-table .el-table th.el-table__cell {
+  padding: 14px 0;
 }
 
 .governance-table__pagination {
@@ -112,6 +135,10 @@
   padding: 18px 22px 14px;
   margin: 0;
   border-bottom: 1px solid var(--roamly-border);
+}
+
+.governance-drawer {
+  transition: width var(--roamly-motion-slow) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .governance-drawer .el-drawer__body {
@@ -296,6 +323,11 @@
 
   .governance-table {
     overflow-x: auto;
+  }
+
+  .governance-table .el-table__body-wrapper,
+  .governance-table .el-table__header-wrapper {
+    min-width: 920px;
   }
 
   .governance-table > .el-table {

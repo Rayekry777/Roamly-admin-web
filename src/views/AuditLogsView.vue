@@ -13,6 +13,8 @@ import { exportAdminResource, listAdminAuditLogs } from "@/api/operations";
 import { errorMessage } from "@/api/client";
 import { saveBlob } from "@/utils/download";
 import type { AdminAuditLog } from "@/types/operations";
+import PageHeader from "@/components/admin/PageHeader.vue";
+import DataTableFrame from "@/components/admin/DataTableFrame.vue";
 const rows = ref<AdminAuditLog[]>([]);
 const total = ref(0);
 const page = ref(1);
@@ -47,17 +49,12 @@ async function exportRows(): Promise<void> {
 </script>
 <template>
   <section class="governance-page">
-    <header class="governance-heading">
-      <div>
-        <p>安全与合规</p>
-        <h1>操作审计</h1>
-      </div>
-      <div class="governance-heading__actions">
-        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton
-        ><span class="governance-heading__meta">共 {{ total }} 条</span>
-      </div>
-    </header>
-    <section class="governance-table">
+    <PageHeader eyebrow="安全与合规" title="操作审计" :meta="`共 ${total} 条`">
+      <template #actions>
+        <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
+      </template>
+    </PageHeader>
+    <DataTableFrame :loading="loading">
       <ElTable
         v-loading="loading"
         :data="rows"
@@ -97,7 +94,7 @@ async function exportRows(): Promise<void> {
           label="时间"
           min-width="180"
       /></ElTable>
-      <div class="governance-table__pagination">
+      <template #pagination>
         <ElPagination
           v-model:current-page="page"
           v-model:page-size="size"
@@ -106,8 +103,8 @@ async function exportRows(): Promise<void> {
           @current-change="load"
           @size-change="load"
         />
-      </div>
-    </section>
+      </template>
+    </DataTableFrame>
     <ElButton
       class="floating-refresh"
       :icon="Refresh"

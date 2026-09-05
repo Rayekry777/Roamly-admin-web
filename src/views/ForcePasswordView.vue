@@ -151,6 +151,7 @@ async function signOut(): Promise<void> {
   border: 1px solid var(--roamly-border);
   border-radius: 8px;
   box-shadow: var(--roamly-shadow);
+  animation: login-panel-enter 240ms ease both;
 }
 
 .password-panel header {
@@ -198,6 +199,22 @@ async function signOut(): Promise<void> {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.password-panel__actions .el-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgb(255 95 87 / 24%);
+}
+
+@keyframes login-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 480px) {
