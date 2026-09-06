@@ -1,5 +1,6 @@
 import type { Pinia } from "pinia";
 import {
+  createMemoryHistory,
   createRouter,
   createWebHistory,
   type RouteRecordRaw,
@@ -114,7 +115,11 @@ export const routes: RouteRecordRaw[] = [
 ];
 
 export function createAppRouter(pinia: Pinia) {
-  const router = createRouter({ history: createWebHistory(), routes });
+  const history =
+    import.meta.env.MODE === "test"
+      ? createMemoryHistory()
+      : createWebHistory();
+  const router = createRouter({ history, routes });
   router.beforeEach(async (to) => {
     const auth = useAuthStore(pinia);
     if (to.meta.public) {
