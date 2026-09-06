@@ -7,6 +7,17 @@ export type CommissionRule = {
   effectiveTo?: string;
   version: number;
 };
+export type FinanceSummary = {
+  frozenAmount: number;
+  recognizedAmount: number;
+  commissionAmount: number;
+  netAmount: number;
+  refundedAmount: number;
+  pendingSettlementAmount: number;
+  settledAmount: number;
+};
+export const getFinanceSummary = () =>
+  http.get<FinanceSummary>("/v1/admin/finance/summary");
 export type LedgerPage = {
   items: Array<{
     id: string;

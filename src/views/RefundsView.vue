@@ -16,6 +16,7 @@ import {
 } from "element-plus";
 import { onMounted, ref } from "vue";
 import {
+  createAdminRefund,
   approveAdminRefund,
   listAdminRefunds,
   rejectAdminRefund,
@@ -37,6 +38,10 @@ const dialog = ref(false);
 const reason = ref("");
 const target = ref<AdminRefund>();
 const submitting = ref(false);
+const createDialog = ref(false);
+const createOrderId = ref("");
+const createVoucherIds = ref("");
+const createReason = ref("");
 const options = [
   { value: "REQUESTED", label: "已申请" },
   { value: "PROCESSING", label: "处理中" },
@@ -107,12 +112,43 @@ async function exportRows(): Promise<void> {
     ElMessage.error(errorMessage(error));
   }
 }
+async function submitCreate(): Promise<void> {
+  if (
+    !createOrderId.value.trim() ||
+    !createVoucherIds.value.trim() ||
+    !createReason.value.trim()
+  ) {
+    ElMessage.warning("请填写订单、券和退款原因");
+    return;
+  }
+  submitting.value = true;
+  try {
+    await createAdminRefund({
+      orderId: createOrderId.value.trim(),
+      voucherIds: createVoucherIds.value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
+      reasonCode: createReason.value.trim(),
+    });
+    createDialog.value = false;
+    ElMessage.success("退款已发起");
+    await load();
+  } catch (error) {
+    ElMessage.error(errorMessage(error));
+  } finally {
+    submitting.value = false;
+  }
+}
 onMounted(load);
 </script>
 <template>
   <section class="governance-page">
     <PageHeader eyebrow="交易监管" title="退款处理" :meta="`共 ${total} 笔`">
       <template #actions>
+        <ElButton type="primary" @click="createDialog = true"
+          >发起退款</ElButton
+        >
         <ElButton type="primary" plain @click="exportRows">导出 XLSX</ElButton>
       </template>
     </PageHeader>
@@ -242,5 +278,28 @@ onMounted(load);
         ></template
       ></ElDialog
     >
+    <ElDialog
+      v-model="createDialog"
+      title="发起退款"
+      width="min(470px, calc(100vw - 28px))"
+    >
+      <ElForm label-position="top">
+        <ElFormItem label="订单 ID" required
+          ><ElInput v-model="createOrderId"
+        /></ElFormItem>
+        <ElFormItem label="券 ID（逗号分隔）" required
+          ><ElInput v-model="createVoucherIds"
+        /></ElFormItem>
+        <ElFormItem label="退款原因" required
+          ><ElInput v-model="createReason" type="textarea" :rows="3"
+        /></ElFormItem>
+      </ElForm>
+      <template #footer
+        ><ElButton @click="createDialog = false">取消</ElButton
+        ><ElButton type="primary" :loading="submitting" @click="submitCreate"
+          >确认发起</ElButton
+        ></template
+      >
+    </ElDialog>
   </section>
 </template>

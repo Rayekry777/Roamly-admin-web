@@ -84,7 +84,10 @@ async function exportRows(): Promise<void> {
         ><ElTableColumn
           label="操作人"
           prop="operatorId"
-          width="130" /><ElTableColumn label="使用次数" prop="useCount" width="110" /><ElTableColumn label="状态" width="110"
+          width="130" /><ElTableColumn
+          label="使用次数"
+          prop="useCount"
+          width="110" /><ElTableColumn label="状态" width="110"
           ><template #default="scope"
             ><ElTag :type="type(scope.row.status)">{{
               label(scope.row.status)

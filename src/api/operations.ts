@@ -60,6 +60,15 @@ export function retryAdminRefund(id: string): Promise<AdminRefund> {
   );
 }
 
+export function createAdminRefund(data: {
+  orderId: string;
+  voucherIds: string[];
+  reasonCode: string;
+  description?: string;
+}): Promise<AdminRefund> {
+  return http.post("/v1/admin/refunds", data, commandHeaders());
+}
+
 export function listAdminRedemptions(
   page = 1,
   size = 20,

@@ -27,7 +27,7 @@ export interface AdminOrder {
 
 export interface AdminOrderDetail {
   order: AdminOrder;
-  product?: { title?: string; saleType?: string; validityText?: string };
+  product?: { title?: string; productType?: string; validityText?: string };
   shop?: { id: string; name: string; address?: string };
   paymentStatus?: string;
   paymentExpireTime?: string;
@@ -42,6 +42,11 @@ export interface AdminRefund {
   reason?: string;
   requestedTime?: string;
   processedTime?: string;
+  source?: "CONSUMER" | "MERCHANT" | "ADMIN";
+  rejectReason?: string;
+  failureCode?: string;
+  failureMessage?: string;
+  providerRefundNo?: string;
 }
 
 export interface AdminRedemption {

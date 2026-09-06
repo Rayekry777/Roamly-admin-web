@@ -8,17 +8,29 @@ import {
   ElTableColumn,
   ElTag,
 } from "element-plus";
-import { exportLedger, listLedger, type LedgerPage } from "@/api/finance";
+import {
+  exportLedger,
+  listLedger,
+  getFinanceSummary,
+  type LedgerPage,
+  type FinanceSummary,
+} from "@/api/finance";
 import { saveBlob } from "@/utils/download";
 import PageHeader from "@/components/admin/PageHeader.vue";
 import DataTableFrame from "@/components/admin/DataTableFrame.vue";
 const loading = ref(false);
 const exporting = ref(false);
 const data = ref<LedgerPage>({ items: [], page: 1, size: 20, total: 0 });
+const summary = ref<FinanceSummary>();
 async function load() {
   loading.value = true;
   try {
-    data.value = await listLedger();
+    const [ledger, totals] = await Promise.all([
+      listLedger(),
+      getFinanceSummary(),
+    ]);
+    data.value = ledger;
+    summary.value = totals;
   } catch (e) {
     ElMessage.error(e instanceof Error ? e.message : "加载账本失败");
   } finally {
@@ -56,6 +68,17 @@ async function exportRows(): Promise<void> {
       </template>
     </PageHeader>
     <DataTableFrame :loading="loading">
+      <div v-if="summary" class="finance-summary">
+        <div>
+          <span>支付冻结</span><strong>{{ summary.frozenAmount }} 分</strong>
+        </div>
+        <div>
+          <span>已退款</span><strong>{{ summary.refundedAmount }} 分</strong>
+        </div>
+        <div>
+          <span>当前净额</span><strong>{{ summary.netAmount }} 分</strong>
+        </div>
+      </div>
       <ElTable
         v-loading="loading"
         :data="data.items"

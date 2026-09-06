@@ -61,8 +61,6 @@ export interface AdminVoucherProduct {
   marketAmount: number | null;
   faceValueAmount: number | null;
   minimumSpendAmount: number | null;
-  discountRateBps: number | null;
-  maximumDiscountAmount: number | null;
   totalUseCount: number | null;
   totalStock: number;
   availableStock: number;
