@@ -85,4 +85,26 @@ export interface AdminAuditLog {
   createTime: string;
 }
 
+export interface CustomerServiceMessage {
+  id: number;
+  senderType: string;
+  visibility: string;
+  content?: string;
+  createTime?: string;
+}
+
+export interface CustomerServiceTicket {
+  id: number;
+  ticketNo: string;
+  type: string;
+  status: string;
+  priority: string;
+  subject: string;
+  description?: string;
+  assigneeAdminId?: number;
+  lastMessageTime?: string;
+  updateTime?: string;
+  messages?: CustomerServiceMessage[];
+}
+
 export type OperationPage<T> = PageResult<T>;

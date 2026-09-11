@@ -8,6 +8,7 @@ import type {
   AdminRefund,
   AdminSettlement,
   OrderStatus,
+  CustomerServiceTicket,
 } from "@/types/operations";
 
 const commandHeaders = () => ({
@@ -100,4 +101,37 @@ export function listAdminAuditLogs(
 
 export function exportAdminResource(resource: string): Promise<Blob> {
   return postBinary(`/v1/admin/${resource}/export`);
+}
+
+export function listCustomerServiceTickets(
+  status?: string,
+  page = 1,
+  size = 20,
+): Promise<PageResult<CustomerServiceTicket>> {
+  return http.get("/v1/admin/customer-service/tickets", {
+    params: { status, page, size },
+  });
+}
+export function claimCustomerServiceTicket(
+  id: number,
+): Promise<CustomerServiceTicket> {
+  return http.post(`/v1/admin/customer-service/tickets/${id}/claim`);
+}
+export function replyCustomerServiceTicket(
+  id: number,
+  content: string,
+): Promise<CustomerServiceTicket> {
+  return http.post(`/v1/admin/customer-service/tickets/${id}/messages`, {
+    content,
+    messageType: "TEXT",
+  });
+}
+export function addCustomerServiceNote(
+  id: number,
+  content: string,
+): Promise<CustomerServiceTicket> {
+  return http.post(`/v1/admin/customer-service/tickets/${id}/internal-notes`, {
+    content,
+    messageType: "TEXT",
+  });
 }

@@ -9,6 +9,7 @@ import {
   Refresh,
   Collection,
   Document,
+  ChatDotRound,
 } from "@element-plus/icons-vue";
 import type { Component } from "vue";
 
@@ -67,6 +68,12 @@ export const adminMenu: MenuItem[] = [
     label: "退款处理",
     permission: "admin:refund:manage",
     icon: Refresh,
+  },
+  {
+    path: "/customer-service",
+    label: "客服工单",
+    permission: "admin:customer-service:read",
+    icon: ChatDotRound,
   },
   {
     path: "/redemptions",

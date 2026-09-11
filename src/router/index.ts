@@ -86,6 +86,12 @@ export const routes: RouteRecordRaw[] = [
         meta: { title: "退款处理", permission: "admin:refund:manage" },
       },
       {
+        path: "customer-service",
+        name: "customer-service",
+        component: () => import("@/views/CustomerServiceView.vue"),
+        meta: { title: "客服工单", permission: "admin:customer-service:read" },
+      },
+      {
         path: "redemptions",
         name: "redemptions",
         component: () => import("@/views/RedemptionsView.vue"),
