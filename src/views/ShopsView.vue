@@ -247,7 +247,7 @@ onMounted(load);
       <ElInput
         v-model="query.keyword"
         clearable
-        placeholder="门店、店主或手机号"
+        placeholder="门店、租户或手机号"
         @keyup.enter="search"
       />
       <div class="governance-filter__actions">
@@ -271,11 +271,11 @@ onMounted(load);
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="店主" min-width="145">
+        <ElTableColumn label="租户" min-width="145">
           <template #default="scope">
             <div class="governance-row-main">
-              <strong>{{ scope.row.ownerName || "未绑定" }}</strong>
-              <small>{{ scope.row.ownerPhoneMasked || "-" }}</small>
+              <strong>{{ scope.row.tenantName || "未绑定" }}</strong>
+              <small>{{ scope.row.tenantPhoneMasked || "-" }}</small>
             </div>
           </template>
         </ElTableColumn>
@@ -414,19 +414,19 @@ onMounted(load);
         </section>
 
         <section class="governance-detail-section">
-          <h2>店主与账号</h2>
+          <h2>租户与账号</h2>
           <div class="governance-detail-grid">
             <div class="governance-detail-field">
-              <label>店主</label>
-              <strong>{{ detail.ownerName || "未绑定" }}</strong>
+              <label>租户</label>
+              <strong>{{ detail.tenantName || "未绑定" }}</strong>
             </div>
             <div class="governance-detail-field">
-              <label>店主手机</label>
-              <span>{{ detail.ownerPhoneMasked || "-" }}</span>
+              <label>租户手机</label>
+              <span>{{ detail.tenantPhoneMasked || "-" }}</span>
             </div>
             <div class="governance-detail-field">
-              <label>店主状态</label>
-              <span>{{ detail.ownerStatusLabel || "-" }}</span>
+              <label>租户状态</label>
+              <span>{{ detail.tenantStatusLabel || "-" }}</span>
             </div>
             <div class="governance-detail-field">
               <label>账号总数</label>

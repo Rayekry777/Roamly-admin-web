@@ -155,8 +155,8 @@ export interface AdminShopListItem {
   shopTypeName: string | null;
   cityCode: string;
   cityName: string | null;
-  ownerName: string | null;
-  ownerPhoneMasked: string | null;
+  tenantName: string | null;
+  tenantPhoneMasked: string | null;
   accountTotal: number;
   activeAccountCount: number;
   disabledAccountCount: number;
@@ -182,11 +182,11 @@ export interface AdminShopDetail {
   longitude: number;
   latitude: number;
   businessHours: BusinessDayHours[];
-  ownerAccountId: string | null;
-  ownerName: string | null;
-  ownerPhoneMasked: string | null;
-  ownerStatus: MerchantAccountStatus | null;
-  ownerStatusLabel: string | null;
+  tenantAccountId: string | null;
+  tenantName: string | null;
+  tenantPhoneMasked: string | null;
+  tenantStatus: MerchantAccountStatus | null;
+  tenantStatusLabel: string | null;
   accountTotal: number;
   activeAccountCount: number;
   disabledAccountCount: number;

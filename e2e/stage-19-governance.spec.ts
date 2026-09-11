@@ -130,11 +130,11 @@ async function mockStage19Api(
     longitude: 120.149192,
     latitude: 30.316078,
     businessHours: hours,
-    ownerAccountId: "1",
-    ownerName: "茶餐厅店主",
-    ownerPhoneMasked: "139****0001",
-    ownerStatus: "ACTIVE",
-    ownerStatusLabel: "已激活",
+    tenantAccountId: "1",
+    tenantName: "茶餐厅租户",
+    tenantPhoneMasked: "139****0001",
+    tenantStatus: "ACTIVE",
+    tenantStatusLabel: "已激活",
     accountTotal: 2,
     activeAccountCount: 1,
     disabledAccountCount: 1,
@@ -270,8 +270,8 @@ async function mockStage19Api(
       const input = request.postDataJSON();
       shop.status = "SUSPENDED";
       shop.statusLabel = "已停用";
-      shop.ownerStatus = "DISABLED";
-      shop.ownerStatusLabel = "已停用";
+      shop.tenantStatus = "DISABLED";
+      shop.tenantStatusLabel = "已停用";
       shop.activeAccountCount = 0;
       shop.disabledAccountCount = 2;
       shop.suspendedAt = "2026-09-04T12:00:00";
@@ -291,8 +291,8 @@ async function mockStage19Api(
       shopKeys.push(request.headers()["idempotency-key"] ?? "");
       shop.status = "ACTIVE";
       shop.statusLabel = "营业中";
-      shop.ownerStatus = "ACTIVE";
-      shop.ownerStatusLabel = "已激活";
+      shop.tenantStatus = "ACTIVE";
+      shop.tenantStatusLabel = "已激活";
       shop.activeAccountCount = 1;
       shop.disabledAccountCount = 1;
       shop.suspendedAt = null;
