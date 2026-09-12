@@ -1,4 +1,8 @@
-export type AdminRole = "PLATFORM_ADMIN" | "MERCHANT_REVIEWER" | "FINANCE";
+export type AdminRole =
+  | "PLATFORM_ADMIN"
+  | "MERCHANT_REVIEWER"
+  | "FINANCE"
+  | "CUSTOMER_SERVICE";
 export type AdminStatus = "ACTIVE" | "DISABLED";
 
 export interface AdminAuthToken {

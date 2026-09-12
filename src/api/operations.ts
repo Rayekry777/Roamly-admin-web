@@ -1,4 +1,4 @@
-import { http, postBinary } from "./client";
+import { getBinary, http, postBinary } from "./client";
 import type { PageResult } from "@/types/http";
 import type {
   AdminAuditLog,
@@ -9,6 +9,13 @@ import type {
   AdminSettlement,
   OrderStatus,
   CustomerServiceTicket,
+  CustomerServiceMessagePage,
+  CustomerServiceQueue,
+  CustomerServiceQuickReply,
+  CustomerServiceTag,
+  CustomerServiceTransfer,
+  CustomerServiceAttachment,
+  RefundTimelineEvent,
 } from "@/types/operations";
 
 const commandHeaders = () => ({
@@ -28,11 +35,21 @@ export function getAdminOrder(id: string): Promise<AdminOrderDetail> {
 }
 
 export function listAdminRefunds(
-  status?: string,
+  queue?: string,
   page = 1,
   size = 20,
 ): Promise<PageResult<AdminRefund>> {
-  return http.get("/v1/admin/refunds", { params: { status, page, size } });
+  return http.get("/v1/admin/refunds", { params: { queue, page, size } });
+}
+
+export function getAdminRefund(id: string): Promise<AdminRefund> {
+  return http.get(`/v1/admin/refunds/${id}`);
+}
+
+export function getAdminRefundTimeline(
+  id: string,
+): Promise<RefundTimelineEvent[]> {
+  return http.get(`/v1/admin/refunds/${id}/timeline`);
 }
 
 export function approveAdminRefund(id: string): Promise<AdminRefund> {
@@ -104,34 +121,121 @@ export function exportAdminResource(resource: string): Promise<Blob> {
 }
 
 export function listCustomerServiceTickets(
-  status?: string,
+  query: {
+    queue?: CustomerServiceQueue;
+    status?: string;
+    applicantType?: string;
+    tagId?: string;
+  } = {},
   page = 1,
   size = 20,
 ): Promise<PageResult<CustomerServiceTicket>> {
   return http.get("/v1/admin/customer-service/tickets", {
-    params: { status, page, size },
+    params: { ...query, page, size },
+  });
+}
+export function getCustomerServiceTicket(
+  id: string,
+): Promise<CustomerServiceTicket> {
+  return http.get(`/v1/admin/customer-service/tickets/${id}`);
+}
+export function listCustomerServiceMessages(
+  id: string,
+  cursor: { before_message_id?: string; after_message_id?: string } = {},
+  limit = 30,
+): Promise<CustomerServiceMessagePage> {
+  return http.get(`/v1/admin/customer-service/tickets/${id}/messages`, {
+    params: { ...cursor, limit },
   });
 }
 export function claimCustomerServiceTicket(
-  id: number,
+  id: string,
 ): Promise<CustomerServiceTicket> {
   return http.post(`/v1/admin/customer-service/tickets/${id}/claim`);
 }
 export function replyCustomerServiceTicket(
-  id: number,
+  id: string,
   content: string,
+  attachmentIds: string[] = [],
 ): Promise<CustomerServiceTicket> {
   return http.post(`/v1/admin/customer-service/tickets/${id}/messages`, {
     content,
-    messageType: "TEXT",
+    messageType: attachmentIds.length ? "IMAGE" : "TEXT",
+    attachmentIds,
   });
 }
 export function addCustomerServiceNote(
-  id: number,
+  id: string,
   content: string,
+  attachmentIds: string[] = [],
 ): Promise<CustomerServiceTicket> {
   return http.post(`/v1/admin/customer-service/tickets/${id}/internal-notes`, {
     content,
-    messageType: "TEXT",
+    messageType: attachmentIds.length ? "IMAGE" : "TEXT",
+    attachmentIds,
   });
+}
+
+export function updateCustomerServiceStatus(
+  id: string,
+  status: string,
+): Promise<CustomerServiceTicket> {
+  return http.put(`/v1/admin/customer-service/tickets/${id}/status`, {
+    status,
+  });
+}
+
+export function transferCustomerServiceTicket(
+  id: string,
+  assigneeAdminId: string,
+  reason: string,
+): Promise<CustomerServiceTicket> {
+  return http.post(`/v1/admin/customer-service/tickets/${id}/transfer`, {
+    assigneeAdminId,
+    reason,
+  });
+}
+
+export function listCustomerServiceTransfers(
+  id: string,
+): Promise<CustomerServiceTransfer[]> {
+  return http.get(`/v1/admin/customer-service/tickets/${id}/transfers`);
+}
+
+export function listCustomerServiceTags(): Promise<CustomerServiceTag[]> {
+  return http.get("/v1/admin/customer-service/tags");
+}
+
+export function replaceCustomerServiceTags(
+  id: string,
+  tagIds: string[],
+): Promise<CustomerServiceTicket> {
+  return http.put(`/v1/admin/customer-service/tickets/${id}/tags`, { tagIds });
+}
+
+export function listCustomerServiceQuickReplies(): Promise<
+  CustomerServiceQuickReply[]
+> {
+  return http.get("/v1/admin/customer-service/quick-replies");
+}
+
+export function uploadCustomerServiceAttachment(
+  ticketId: string,
+  file: File,
+): Promise<CustomerServiceAttachment> {
+  const data = new FormData();
+  data.append("file", file);
+  return http.post(
+    `/v1/admin/customer-service/tickets/${ticketId}/attachments`,
+    data,
+  );
+}
+
+export function getCustomerServiceAttachment(
+  ticketId: string,
+  attachmentId: string,
+): Promise<Blob> {
+  return getBinary(
+    `/v1/admin/customer-service/tickets/${ticketId}/attachments/${attachmentId}/content`,
+  );
 }

@@ -1,11 +1,6 @@
 import type { PageResult } from "./http";
 
-export type OrderStatus =
-  | "PENDING_PAYMENT"
-  | "PAID"
-  | "CANCELED"
-  | "REFUNDING"
-  | "REFUNDED";
+export type OrderStatus = "PENDING_PAYMENT" | "PAID" | "CANCELED" | "COMPLETED";
 
 export interface AdminOrder {
   id: string;
@@ -47,6 +42,45 @@ export interface AdminRefund {
   failureCode?: string;
   failureMessage?: string;
   providerRefundNo?: string;
+  decisionStatus?: string;
+  executionStatus?: string;
+  ticketId?: string;
+  executionStartedTime?: string;
+  lastFailureTime?: string;
+  retryCount?: number;
+  currentHandlerId?: string;
+  reviewerAdminId?: string;
+  reviewNote?: string;
+  version?: number;
+  productTitle?: string;
+  paymentChannel?: string;
+  refundNo?: string;
+  merchantOrderNo?: string;
+  items?: RefundItem[];
+}
+
+export interface RefundItem {
+  id: string;
+  voucherId: string;
+  redeemed: boolean;
+  saleAmount: number;
+  customerPaidAmount: number;
+  platformSubsidyAmount: number;
+  merchantSubsidyAmount: number;
+  serviceFeeAmount: number;
+  refundableAmount: number;
+  refundAmount: number;
+  status: string;
+  reversedIncomeAmount: number;
+  refundedServiceFeeAmount: number;
+}
+
+export interface RefundTimelineEvent {
+  type: string;
+  title: string;
+  status: string;
+  description?: string;
+  occurredAt?: string;
 }
 
 export interface AdminRedemption {
@@ -86,25 +120,100 @@ export interface AdminAuditLog {
 }
 
 export interface CustomerServiceMessage {
-  id: number;
+  id: string;
+  ticketId: string;
   senderType: string;
+  senderId?: string;
   visibility: string;
+  messageType: string;
   content?: string;
   createTime?: string;
+  attachments: CustomerServiceAttachment[];
 }
 
 export interface CustomerServiceTicket {
-  id: number;
+  id: string;
   ticketNo: string;
   type: string;
   status: string;
   priority: string;
+  applicantType: "CONSUMER" | "MERCHANT";
+  applicantId: string;
+  relatedUserId?: string;
+  relatedShopId?: string;
+  orderId?: string;
+  voucherId?: string;
+  refundId?: string;
+  redemptionId?: string;
   subject: string;
   description?: string;
-  assigneeAdminId?: number;
+  assigneeAdminId?: string;
+  firstResponseTime?: string;
+  lastResponseTime?: string;
+  waitingCustomerSince?: string;
+  waitingMerchantSince?: string;
+  resolvedTime?: string;
+  closedTime?: string;
+  slaDeadline?: string;
+  slaBreached: boolean;
+  hasInternalNote: boolean;
+  unreadCount: number;
   lastMessageTime?: string;
+  createTime?: string;
   updateTime?: string;
+  tags: CustomerServiceTag[];
   messages?: CustomerServiceMessage[];
 }
+
+export interface CustomerServiceAttachment {
+  id: string;
+  ticketId: string;
+  messageId?: string;
+  status: string;
+  originalFilename: string;
+  mimeType: string;
+  byteSize: number;
+  contentPath: string;
+}
+
+export interface CustomerServiceMessagePage {
+  items: CustomerServiceMessage[];
+  oldestMessageId?: string;
+  newestMessageId?: string;
+  hasMore: boolean;
+}
+
+export interface CustomerServiceTag {
+  id: string;
+  code: string;
+  name: string;
+  color: string;
+}
+
+export interface CustomerServiceQuickReply {
+  id: string;
+  title: string;
+  content: string;
+  scope: "PERSONAL" | "TEAM";
+  ownerAdminId?: string;
+  sortOrder: number;
+}
+
+export interface CustomerServiceTransfer {
+  id: string;
+  ticketId: string;
+  fromAdminId?: string;
+  toAdminId: string;
+  operatorAdminId: string;
+  reason: string;
+  createTime?: string;
+}
+
+export type CustomerServiceQueue =
+  | "UNCLAIMED"
+  | "MINE"
+  | "SLA_BREACHED"
+  | "HIGH_PRIORITY"
+  | "REFUND";
 
 export type OperationPage<T> = PageResult<T>;
