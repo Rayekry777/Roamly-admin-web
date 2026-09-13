@@ -1,12 +1,4 @@
 import { http, postBinary } from "./client";
-export type CommissionRule = {
-  id: string | null;
-  shopId: string | null;
-  rateBps: number;
-  effectiveFrom: string;
-  effectiveTo?: string;
-  version: number;
-};
 export type FinanceSummary = {
   frozenAmount: number;
   recognizedAmount: number;
@@ -32,10 +24,6 @@ export type LedgerPage = {
   size: number;
   total: number;
 };
-export const getCommissionRule = (shopId?: string) =>
-  http.get<CommissionRule>("/v1/admin/commission-rules", {
-    params: { shopId },
-  });
 export const listLedger = (page = 1, size = 20) =>
   http.get<LedgerPage>("/v1/admin/ledger-entries", { params: { page, size } });
 export const exportLedger = () => postBinary("/v1/admin/ledger/export");

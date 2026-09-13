@@ -1,5 +1,3 @@
-import type { PageResult } from "./http";
-
 export type OrderStatus = "PENDING_PAYMENT" | "PAID" | "CANCELED" | "COMPLETED";
 
 export interface AdminOrder {
@@ -199,21 +197,9 @@ export interface CustomerServiceQuickReply {
   sortOrder: number;
 }
 
-export interface CustomerServiceTransfer {
-  id: string;
-  ticketId: string;
-  fromAdminId?: string;
-  toAdminId: string;
-  operatorAdminId: string;
-  reason: string;
-  createTime?: string;
-}
-
 export type CustomerServiceQueue =
   | "UNCLAIMED"
   | "MINE"
   | "SLA_BREACHED"
   | "HIGH_PRIORITY"
   | "REFUND";
-
-export type OperationPage<T> = PageResult<T>;

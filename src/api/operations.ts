@@ -13,7 +13,6 @@ import type {
   CustomerServiceQueue,
   CustomerServiceQuickReply,
   CustomerServiceTag,
-  CustomerServiceTransfer,
   CustomerServiceAttachment,
   RefundTimelineEvent,
 } from "@/types/operations";
@@ -194,12 +193,6 @@ export function transferCustomerServiceTicket(
     assigneeAdminId,
     reason,
   });
-}
-
-export function listCustomerServiceTransfers(
-  id: string,
-): Promise<CustomerServiceTransfer[]> {
-  return http.get(`/v1/admin/customer-service/tickets/${id}/transfers`);
 }
 
 export function listCustomerServiceTags(): Promise<CustomerServiceTag[]> {
