@@ -66,3 +66,5 @@ pnpm test:e2e
 ```
 
 默认 API 地址为 `/api`，可通过 `VITE_API_BASE_URL` 覆盖。生产由 Nginx 提供 `/api` 前缀，前端业务路径保持 `/v1/**`，避免重复拼接前缀。
+
+计费与补贴计算统一见 [计费、补贴与结算计算细节](../Roamly/docs/project-details/计费、补贴与结算计算细节.md)，页面操作说明继续维护在本项目对应细节文档。
