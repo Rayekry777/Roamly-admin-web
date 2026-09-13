@@ -43,3 +43,14 @@ export function rejectVoucherReview(
     { headers: { "Idempotency-Key": idempotencyKey } },
   );
 }
+
+export function updatePlatformSubsidy(
+  productId: string,
+  version: number,
+  platformDiscountAmount: number,
+): Promise<void> {
+  return http.put(`/v1/admin/voucher-reviews/${productId}/platform-subsidy`, {
+    version,
+    platformDiscountAmount,
+  });
+}

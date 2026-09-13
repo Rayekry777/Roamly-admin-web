@@ -30,6 +30,7 @@ import {
   getVoucherReview,
   listVoucherReviews,
   rejectVoucherReview,
+  updatePlatformSubsidy,
 } from "@/api/voucher-review";
 import { ApiError, errorMessage } from "@/api/client";
 import PageHeader from "@/components/admin/PageHeader.vue";
@@ -68,6 +69,44 @@ const detail = ref<AdminVoucherReviewDetail | null>(null);
 const commandSubmitting = ref(false);
 const rejectionVisible = ref(false);
 const rejectionReason = ref("");
+const platformSubsidyYuan = ref("0.00");
+
+async function savePlatformSubsidy(): Promise<void> {
+  const current = detail.value;
+  if (!current || commandSubmitting.value) return;
+  const value = platformSubsidyYuan.value.trim();
+  if (!/^\d+(?:\.\d{1,2})?$/.test(value)) {
+    ElMessage.warning("平台补贴必须是非负金额，最多两位小数");
+    return;
+  }
+  const amount = Math.round(Number(value) * 100);
+  if (
+    !Number.isSafeInteger(amount) ||
+    amount > 100000000 ||
+    current.product.priceAmount == null ||
+    amount + (current.product.merchantSubsidyAmount ?? 0) >
+      current.product.priceAmount
+  ) {
+    ElMessage.warning("商家补贴与平台补贴合计不能超过售价");
+    return;
+  }
+  commandSubmitting.value = true;
+  try {
+    await updatePlatformSubsidy(
+      current.product.id,
+      current.product.version,
+      amount,
+    );
+    ElMessage.success("平台补贴已保存，仅影响新订单");
+    await reloadDetail();
+    await load();
+  } catch (error) {
+    ElMessage.error(errorMessage(error));
+    if (error instanceof ApiError && error.status === 409) await reloadDetail();
+  } finally {
+    commandSubmitting.value = false;
+  }
+}
 
 const canDecide = computed(
   () => detail.value?.product.reviewStatus === "PENDING",
@@ -113,6 +152,9 @@ async function openDetail(row: AdminVoucherReviewListItem): Promise<void> {
   detailLoading.value = true;
   try {
     detail.value = await getVoucherReview(row.id);
+    platformSubsidyYuan.value = (
+      (detail.value.product.platformDiscountAmount ?? 0) / 100
+    ).toFixed(2);
   } catch (error) {
     drawerVisible.value = false;
     ElMessage.error(errorMessage(error));
@@ -127,6 +169,9 @@ async function reloadDetail(): Promise<void> {
   detailLoading.value = true;
   try {
     detail.value = await getVoucherReview(current.product.id);
+    platformSubsidyYuan.value = (
+      (detail.value.product.platformDiscountAmount ?? 0) / 100
+    ).toFixed(2);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       drawerVisible.value = false;
@@ -448,6 +493,32 @@ onMounted(load);
               >
             </div>
           </div>
+        </section>
+        <section class="governance-detail-section">
+          <h2>活动优惠</h2>
+          <p>
+            每份商家补贴：{{
+              formatFen(detail.product.merchantSubsidyAmount ?? 0)
+            }}（商家承担）
+          </p>
+          <ElForm label-position="top">
+            <ElFormItem label="每份平台补贴（元）">
+              <ElInput
+                v-model="platformSubsidyYuan"
+                :disabled="commandSubmitting"
+                placeholder="0.00，填 0 取消"
+              />
+            </ElFormItem>
+            <p class="governance-dialog-note">
+              由平台承担，抵扣用户实付并补入商家应收。次卡按整张券设置；仅影响新订单。
+            </p>
+            <ElButton
+              type="primary"
+              :loading="commandSubmitting"
+              @click="savePlatformSubsidy"
+              >保存平台补贴</ElButton
+            >
+          </ElForm>
         </section>
         <section class="governance-detail-section">
           <h2>权益与使用规则</h2>

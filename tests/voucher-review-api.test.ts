@@ -5,16 +5,35 @@ import {
   getVoucherReview,
   listVoucherReviews,
   rejectVoucherReview,
+  updatePlatformSubsidy,
 } from "@/api/voucher-review";
 
-const mocks = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn() }));
+const mocks = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn(), put: vi.fn() }));
 const { get, post } = mocks;
-vi.mock("@/api/client", () => ({ http: { get: mocks.get, post: mocks.post } }));
+vi.mock("@/api/client", () => ({
+  http: { get: mocks.get, post: mocks.post, put: mocks.put },
+}));
 
 describe("团购券审核请求契约", () => {
   beforeEach(() => {
     get.mockReset();
     post.mockReset();
+    mocks.put.mockReset();
+  });
+
+  it("平台补贴独立设置，携带版本和整数分，支持取消", async () => {
+    await updatePlatformSubsidy("7", 3, 500);
+    await updatePlatformSubsidy("7", 4, 0);
+    expect(mocks.put).toHaveBeenNthCalledWith(
+      1,
+      "/v1/admin/voucher-reviews/7/platform-subsidy",
+      { version: 3, platformDiscountAmount: 500 },
+    );
+    expect(mocks.put).toHaveBeenNthCalledWith(
+      2,
+      "/v1/admin/voucher-reviews/7/platform-subsidy",
+      { version: 4, platformDiscountAmount: 0 },
+    );
   });
 
   it("使用管理端审核路径和筛选参数", async () => {

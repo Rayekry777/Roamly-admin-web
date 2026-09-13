@@ -59,6 +59,8 @@ export interface AdminVoucherProduct {
   detailMedia: VoucherMedia[];
   priceAmount: number | null;
   marketAmount: number | null;
+  merchantSubsidyAmount?: number;
+  platformDiscountAmount?: number;
   faceValueAmount: number | null;
   minimumSpendAmount: number | null;
   totalUseCount: number | null;
