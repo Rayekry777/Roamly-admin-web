@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ShopCategorySelect from "@/components/ShopCategorySelect.vue";
 import {
   CircleCheck,
   CloseBold,
@@ -331,7 +332,7 @@ onBeforeUnmount(releaseMediaUrls);
         />
       </ElSelect>
       <ElInput v-model="query.cityCode" clearable placeholder="城市编码" />
-      <ElInput v-model="query.shopTypeId" clearable placeholder="类目 ID" />
+      <ShopCategorySelect v-model="query.shopTypeId" />
       <ElInput
         v-model="query.phone"
         clearable
